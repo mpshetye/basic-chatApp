@@ -18,5 +18,19 @@ const server = app.listen(port, ()=>{
 
 //socket setup
 const io = socket(server);
+io.on('connection', (socket)=>{
+    console.log(`connection established on ${socket.id}`);
+
+    //handle chat event
+    socket.on('chat', (data)=>{
+        console.log(data);
+        io.sockets.emit('display', data);
+    });
+
+    //handle typing event
+    socket.on('typing', (data)=>{
+        socket.broadcast.emit('typingView', data);
+    });
+});
 
 
